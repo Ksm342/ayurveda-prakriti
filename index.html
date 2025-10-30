@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ayurveda Prakriti Assessment</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Diet Planner – BMI & Ayurveda Based</title>
 
-<!-- 🌿 Google Fonts -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -15,87 +15,52 @@ body {
   background: url('https://www.toptal.com/designers/subtlepatterns/patterns/wood_pattern.png');
   background-size: cover;
   color: #3b2f2f;
-  overflow-x: hidden;
 }
 
 h1 {
   text-align: center;
-  padding: 25px 10px;
-  font-weight: 600;
-  color: #5a3a1e;
+  padding: 25px;
   font-family: 'Marcellus', serif;
+  color: #5a3a1e;
   background: linear-gradient(180deg, #fbeec1 0%, #f8e3a3 100%);
   border-bottom: 3px solid #c19a6b;
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  text-shadow: 0 1px 1px #fff;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 600px;
   margin: 40px auto;
-  padding: 20px;
-  background: rgba(255,255,255,0.85);
+  padding: 25px;
+  background: rgba(255,255,255,0.9);
   border-radius: 12px;
   box-shadow: 0 0 25px rgba(120, 70, 20, 0.3);
 }
 
-/* ✨ Card Style */
-.card3d {
-  background: #fff7e6;
-  padding: 18px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #d1b27c;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform .2s, box-shadow .2s;
-}
-
-.card3d:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-}
-
-/* ✨ Options */
-.option {
+label {
   display: block;
-  margin: 10px 0;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 1px solid #d8c49a;
-  background: #fffaf0;
-  transition: 0.25s;
+  margin-top: 15px;
+  font-weight: bold;
 }
 
-.option:hover {
-  background: #fbe3a3;
-  border-color: #c19a6b;
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #c19a6b;
+  background: #fffdf8;
 }
 
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + label {
-  background: #f2cf79;
-  border-color: #b38334;
-  box-shadow: inset 0 0 8px rgba(179,131,52,0.4);
-}
-
-/* ✨ Button */
 button {
   width: 100%;
-  padding: 15px;
   margin-top: 20px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
+  padding: 12px;
   background: linear-gradient(90deg, #d99b4a, #b67a2e);
   color: #fffaf0;
   font-weight: 600;
-  font-family: 'Marcellus', serif;
-  letter-spacing: 0.5px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
@@ -104,7 +69,6 @@ button:hover {
   box-shadow: 0 0 15px rgba(184, 120, 20, 0.6);
 }
 
-/* ✨ Result Box */
 #resultBox {
   margin-top: 30px;
   padding: 20px;
@@ -112,86 +76,102 @@ button:hover {
   border: 2px solid #cfa86e;
   border-radius: 12px;
   display: none;
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
 @keyframes fadeIn {
   from {opacity: 0; transform: translateY(30px);}
   to {opacity: 1; transform: translateY(0);}
 }
+
+footer {
+  text-align: center;
+  margin-top: 30px;
+  color: #7a5a2f;
+  font-size: 14px;
+}
 </style>
 </head>
 <body>
 
-<h1>🪔 AYURVEDA PRAKRITI – SELF ASSESSMENT</h1>
+<h1>🍎 Daily Diet Planner – BMI & Ayurveda Based</h1>
 
-<div class="container" id="quiz"></div>
+<div class="container">
+  <label for="height">Enter Height (in cm):</label>
+  <input type="number" id="height" placeholder="e.g., 170">
 
-<button onclick="submitQuiz()">🔍 Reveal My Prakriti</button>
+  <label for="weight">Enter Weight (in kg):</label>
+  <input type="number" id="weight" placeholder="e.g., 65">
 
-<div id="resultBox"></div>
+  <label for="diet">Select Food Preference:</label>
+  <select id="diet">
+    <option value="veg">Vegetarian</option>
+    <option value="nonveg">Non-Vegetarian</option>
+    <option value="mixed">Mixed</option>
+  </select>
+
+  <button onclick="calculateBMI()">🔍 Generate My Diet Plan</button>
+
+  <div id="resultBox"></div>
+</div>
+
+<footer>Developed for IHWP Project Submission | Ayurveda & Wellness Theme</footer>
 
 <script>
-// Questions
-const questions = [
-{q:"Skin type", opts:{V:"Dry", P:"Oily", K:"Soft/Glowing"}},
-{q:"Body Build", opts:{V:"Thin", P:"Medium/Muscular", K:"Heavy"}},
-{q:"Hair", opts:{V:"Dry/Frizzy", P:"Fine/Oily", K:"Thick/Shiny"}},
-{q:"Energy Pattern", opts:{V:"Variable", P:"High & Intense", K:"Steady"}},
-{q:"Sleep", opts:{V:"Light", P:"Moderate", K:"Deep"}},
-{q:"Memory", opts:{V:"Quick/Forgetful", P:"Sharp", K:"Slow but Strong"}},
-{q:"Emotions", opts:{V:"Anxious", P:"Aggressive", K:"Calm"}},
-{q:"Weather Comfort", opts:{V:"Hates Cold", P:"Hates Heat", K:"Hates Damp"}},
-{q:"Eating tendency", opts:{V:"Irregular", P:"Strong hunger", K:"Slow eater"}},
-{q:"Stress reaction", opts:{V:"Fear", P:"Anger", K:"Withdrawal"}},
-];
+function calculateBMI() {
+  const h = parseFloat(document.getElementById('height').value);
+  const w = parseFloat(document.getElementById('weight').value);
+  const pref = document.getElementById('diet').value;
+  const box = document.getElementById('resultBox');
 
-let quizDiv = document.getElementById("quiz");
-
-// Build Quiz
-questions.forEach((q, i) => {
-  let html = `<div class='card3d'><b>${i+1}. ${q.q}</b>`;
-  Object.entries(q.opts).forEach(([d, label]) => {
-    html += `
-      <div>
-        <input type="radio" id="${i}_${d}" name="q${i}" value="${d}">
-        <label class="option" for="${i}_${d}">${label}</label>
-      </div>`;
-  });
-  html += "</div>";
-  quizDiv.innerHTML += html;
-});
-
-// Calculate Result
-function submitQuiz() {
-  let score = {V:0, P:0, K:0};
-  for (let i=0; i<questions.length; i++) {
-    let ans = document.querySelector(`input[name="q${i}"]:checked`);
-    if (!ans) { alert("⚠️ Please answer all questions"); return; }
-    score[ans.value]++;
+  if (!h || !w) {
+    alert("⚠️ Please enter both height and weight!");
+    return;
   }
 
-  let max = Math.max(score.V, score.P, score.K);
-  let dominant = [];
-  for (let d in score) { if (score[d] == max) dominant.push(d); }
+  const bmi = (w / ((h/100) ** 2)).toFixed(1);
+  let category = "";
+  let advice = "";
 
-  const label = {V:"Vata", P:"Pitta", K:"Kapha"};
-  let r = dominant.map(x => label[x]).join(" + ");
+  if (bmi < 18.5) category = "Underweight";
+  else if (bmi < 24.9) category = "Normal Weight";
+  else if (bmi < 29.9) category = "Overweight";
+  else category = "Obese";
 
-  const meaning = {
-    V:"💨 <b>VATA</b> — Creative, quick-minded, dry skin, and energetic spirit.",
-    P:"🔥 <b>PITTA</b> — Focused, passionate, warm-natured, with strong digestion.",
-    K:"🌊 <b>KAPHA</b> — Calm, loyal, steady, and emotionally balanced personality."
+  // Diet suggestions based on BMI and preference
+  const dietPlans = {
+    veg: {
+      Underweight: "Include ghee, milk, nuts, banana shakes, paneer, and lentils. Eat 5–6 small meals a day.",
+      "Normal Weight": "Eat balanced meals with vegetables, chapati, dal, rice, and fruits. Stay hydrated.",
+      Overweight: "Avoid fried food, sweets, and late-night snacks. Eat more green leafy veggies.",
+      Obese: "Focus on salads, soups, and steamed foods. Avoid sugar and excess carbs."
+    },
+    nonveg: {
+      Underweight: "Add eggs, chicken, milk, rice, and peanut butter to your meals.",
+      "Normal Weight": "Eat balanced meals with chicken/fish, rice, vegetables, and fruits.",
+      Overweight: "Choose grilled or boiled meat, avoid red meat, reduce oil intake.",
+      Obese: "Eat boiled eggs, soups, fruits, and avoid heavy meats or fried food."
+    },
+    mixed: {
+      Underweight: "Combine dairy, nuts, and lean meats. Include protein-rich foods.",
+      "Normal Weight": "Eat balanced meals with a mix of plant and animal protein.",
+      Overweight: "Limit sweets, fried items, and processed foods.",
+      Obese: "Focus on fruits, boiled vegetables, and lean proteins with less oil."
+    }
   };
 
-  let txt = `<h2>Your Prakriti: <span style='color:#b77a30;'>${r}</span></h2>`;
-  dominant.forEach(x => txt += `<p>${meaning[x]}</p>`);
-  txt += `<br><small><b>Score →</b> V:${score.V}, P:${score.P}, K:${score.K}</small>`;
+  advice = dietPlans[pref][category];
 
-  let box = document.getElementById("resultBox");
-  box.innerHTML = txt;
+  box.innerHTML = `
+    <h2>Your BMI: <span style="color:#b77a30;">${bmi}</span></h2>
+    <p><b>Category:</b> ${category}</p>
+    <hr>
+    <h3>🍽 Recommended Diet Plan:</h3>
+    <p>${advice}</p>
+  `;
   box.style.display = "block";
 }
 </script>
+
 </body>
 </html>
